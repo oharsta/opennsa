@@ -72,9 +72,9 @@ class LinkVector:
 
         log.msg('* Calculating shortest-path vectors', debug=True, system=LOG_SYSTEM)
         paths = {}
-        for port, vectors in self.vectors.items():
+        for port, vectors in list(self.vectors.items()):
 
-            for network, cost in vectors.items():
+            for network, cost in list(vectors.items()):
                 if network in self.local_networks:
                     continue # skip local networks
                 if network in self.blacklist_networks:
@@ -105,5 +105,5 @@ class LinkVector:
 
     def listVectors(self):
         # needed for exporting topologies
-        return { network : cost for (network, (_, cost) ) in self._shortest_paths.items() }
+        return { network : cost for (network, (_, cost) ) in list(self._shortest_paths.items()) }
 

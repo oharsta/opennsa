@@ -27,8 +27,8 @@ class PrunerTest(unittest.TestCase):
         path = [ sfn_link, ndn_link, dec_link ]
         pruned_path = pruner.pruneLabels(path)
 
-        self.assertEquals(pruned_path[0].dst_stp.label.labelValue(), '1784')
-        self.assertEquals(pruned_path[1].src_stp.label.labelValue(), '1784')
+        self.assertEqual(pruned_path[0].dst_stp.label.labelValue(), '1784')
+        self.assertEqual(pruned_path[1].src_stp.label.labelValue(), '1784')
 
 
     def testPruningEnd(self):
@@ -42,7 +42,7 @@ class PrunerTest(unittest.TestCase):
         path = [ ndn_link, sfn_link ]
         pruned_path = pruner.pruneLabels(path)
 
-        self.assertEquals(pruned_path[0].dst_stp.label.labelValue(), '2077')
-        self.assertEquals(pruned_path[1].src_stp.label.labelValue(), '2077')
+        self.assertEqual(pruned_path[0].dst_stp.label.labelValue(), '2077')
+        self.assertEqual(pruned_path[1].src_stp.label.labelValue(), '2077')
 
 

@@ -80,17 +80,17 @@ class NCSVPNBackendTest(unittest.TestCase):
         self.clock.advance(3)
 
         connection_id, active, version_consistent, version, timestamp = yield d_up
-        self.failUnlessEqual(cid, connection_id)
-        self.failUnlessEqual(active, True)
-        self.failUnlessEqual(version_consistent, True)
+        self.assertEqual(cid, connection_id)
+        self.assertEqual(active, True)
+        self.assertEqual(version_consistent, True)
 
         #yield self.release(self.requester_nsa, self.provider_nsa, None, cid)
         yield self.backend.terminate(self.requester_nsa, self.provider_nsa, None, cid)
 
         connection_id, active, version_consistent, version, timestamp = yield d_down
-        self.failUnlessEqual(cid, connection_id)
-        self.failUnlessEqual(active, False)
-        self.failUnlessEqual(version_consistent, True)
+        self.assertEqual(cid, connection_id)
+        self.assertEqual(active, False)
+        self.assertEqual(version_consistent, True)
 
     testActivation.skip = 'NCS VPN Test Requires NCS lab setup'
 

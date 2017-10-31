@@ -26,17 +26,17 @@ class LinkVectorTest(unittest.TestCase):
 
         self.rv.updateVector(ARUBA_PORT, { ARUBA_TOPO : 1, BONAIRE_TOPO : 2 , CURACAO_TOPO : 3 } )
 
-        self.failUnlessEqual( self.rv.vector(ARUBA_TOPO),   ARUBA_PORT)
-        self.failUnlessEqual( self.rv.vector(BONAIRE_TOPO), ARUBA_PORT)
-        self.failUnlessEqual( self.rv.vector(CURACAO_TOPO), ARUBA_PORT)
+        self.assertEqual( self.rv.vector(ARUBA_TOPO),   ARUBA_PORT)
+        self.assertEqual( self.rv.vector(BONAIRE_TOPO), ARUBA_PORT)
+        self.assertEqual( self.rv.vector(CURACAO_TOPO), ARUBA_PORT)
 
         self.failUnlessEquals( self.rv.listVectors(), { ARUBA_TOPO   : 1, BONAIRE_TOPO : 2, CURACAO_TOPO : 3 } )
 
         self.rv.updateVector(BONAIRE_PORT, { BONAIRE_TOPO: 1, CURACAO_TOPO : 2 } )
 
-        self.failUnlessEqual( self.rv.vector(ARUBA_TOPO),   ARUBA_PORT)
-        self.failUnlessEqual( self.rv.vector(BONAIRE_TOPO), BONAIRE_PORT)
-        self.failUnlessEqual( self.rv.vector(CURACAO_TOPO), BONAIRE_PORT)
+        self.assertEqual( self.rv.vector(ARUBA_TOPO),   ARUBA_PORT)
+        self.assertEqual( self.rv.vector(BONAIRE_TOPO), BONAIRE_PORT)
+        self.assertEqual( self.rv.vector(CURACAO_TOPO), BONAIRE_PORT)
 
         self.failUnlessEquals( self.rv.listVectors(), { ARUBA_TOPO   : 1, BONAIRE_TOPO : 1, CURACAO_TOPO : 2 } )
 
@@ -47,9 +47,9 @@ class LinkVectorTest(unittest.TestCase):
 
         self.rv.updateVector(ARUBA_PORT, { ARUBA_TOPO : 1, BONAIRE_TOPO : 1, CURACAO_TOPO : 2 } )
 
-        self.failUnlessEqual( self.rv.vector(ARUBA_TOPO),   ARUBA_PORT)
-        self.failUnlessEqual( self.rv.vector(BONAIRE_TOPO), None)
-        self.failUnlessEqual( self.rv.vector(CURACAO_TOPO), ARUBA_PORT)
+        self.assertEqual( self.rv.vector(ARUBA_TOPO),   ARUBA_PORT)
+        self.assertEqual( self.rv.vector(BONAIRE_TOPO), None)
+        self.assertEqual( self.rv.vector(CURACAO_TOPO), ARUBA_PORT)
 
 
     def testBlackList(self):
@@ -58,9 +58,9 @@ class LinkVectorTest(unittest.TestCase):
 
         self.rv.updateVector(ARUBA_PORT, { ARUBA_TOPO : 1, BONAIRE_TOPO : 1 , CURACAO_TOPO : 2 } )
 
-        self.failUnlessEqual( self.rv.vector(ARUBA_TOPO),   ARUBA_PORT)
-        self.failUnlessEqual( self.rv.vector(BONAIRE_TOPO), None)
-        self.failUnlessEqual( self.rv.vector(CURACAO_TOPO), None)
+        self.assertEqual( self.rv.vector(ARUBA_TOPO),   ARUBA_PORT)
+        self.assertEqual( self.rv.vector(BONAIRE_TOPO), None)
+        self.assertEqual( self.rv.vector(CURACAO_TOPO), None)
 
 
     def testMaxCost(self):
@@ -69,8 +69,8 @@ class LinkVectorTest(unittest.TestCase):
 
         self.rv.updateVector(ARUBA_PORT, { ARUBA_TOPO : 1, BONAIRE_TOPO : 1 , CURACAO_TOPO : 4 } )
 
-        self.failUnlessEqual( self.rv.vector(ARUBA_TOPO),   ARUBA_PORT)
-        self.failUnlessEqual( self.rv.vector(BONAIRE_TOPO), None)
-        self.failUnlessEqual( self.rv.vector(CURACAO_TOPO), None)
+        self.assertEqual( self.rv.vector(ARUBA_TOPO),   ARUBA_PORT)
+        self.assertEqual( self.rv.vector(BONAIRE_TOPO), None)
+        self.assertEqual( self.rv.vector(CURACAO_TOPO), None)
 
 

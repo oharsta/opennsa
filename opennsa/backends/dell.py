@@ -126,7 +126,7 @@ class DellTelnetProtocol(TelnetProtocol):
             # exit from device, this will make it drop the connection, so we don't wait for anything
             self.transport.write(COMMAND_EXIT + LT)
  
-        except Exception, e:
+        except Exception as e:
             log.msg('Error sending commands: %s' % str(e))
             raise e
 

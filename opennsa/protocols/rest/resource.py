@@ -30,7 +30,7 @@ def _requestResponse(request, code, payload, headers=None):
     request.setResponseCode(code)
     request.setHeader(CONTENT_LENGTH, len(payload))
     if headers is not None:
-        for key, value in headers.items():
+        for key, value in list(headers.items()):
             request.setHeader(key, value)
     return payload
 
@@ -227,7 +227,7 @@ class P2PBaseResource(resource.Resource):
                     conn = yield self.provider.getConnection(conn_id)
 
                     def stateUpdate():
-                        print 'stateUpdate', conn.reservation_state, conn.provision_state
+                        print('stateUpdate', conn.reservation_state, conn.provision_state)
                         if conn.reservation_state == state.RESERVE_HELD:
                             self.provider.reserveCommit(header, conn_id, request_info)
                         if conn.reservation_state == state.RESERVE_START and conn.provision_state == state.RELEASED and auto_provision:

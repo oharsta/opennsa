@@ -1,4 +1,4 @@
-import StringIO
+import io
 
 from twisted.trial import unittest
 
@@ -21,26 +21,26 @@ class NRMParserTest(unittest.TestCase):
 
     def testPortMapping(self):
 
-        nrm_ports = nrm.parsePortSpec( StringIO.StringIO(NRM_ENTRY) )
+        nrm_ports = nrm.parsePortSpec( io.StringIO(NRM_ENTRY) )
 
         port_map = dict( [ (p.name, p.interface) for p in nrm_ports ] )
 
-        self.assertEquals( port_map.get('ps'),           'em0')
-        self.assertEquals( port_map.get('netherlight'),  'em1')
-        self.assertEquals( port_map.get('somelight'),    'em8')
-        self.assertEquals( port_map.get('uvalight'),     'em2')
-        self.assertEquals( port_map.get('splight'),      'em7')
+        self.assertEqual( port_map.get('ps'),           'em0')
+        self.assertEqual( port_map.get('netherlight'),  'em1')
+        self.assertEqual( port_map.get('somelight'),    'em8')
+        self.assertEqual( port_map.get('uvalight'),     'em2')
+        self.assertEqual( port_map.get('splight'),      'em7')
 
 
     def testRemotePort(self):
 
-        nrm_ports = nrm.parsePortSpec( StringIO.StringIO(NRM_ENTRY) )
+        nrm_ports = nrm.parsePortSpec( io.StringIO(NRM_ENTRY) )
 
         port_map = dict( [ (p.name, p.remote_port) for p in nrm_ports ] )
 
-        self.assertEquals( port_map.get('ps'),          None)
-        self.assertEquals( port_map.get('netherlight'), 'netherlight:intf1')
-        self.assertEquals( port_map.get('somelight'),   'somelight:intf2')
-        self.assertEquals( port_map.get('uvalight'),    'uvalight:intf3')
-        self.assertEquals( port_map.get('splight'),     'splight:intf4')
+        self.assertEqual( port_map.get('ps'),          None)
+        self.assertEqual( port_map.get('netherlight'), 'netherlight:intf1')
+        self.assertEqual( port_map.get('somelight'),   'somelight:intf2')
+        self.assertEqual( port_map.get('uvalight'),    'uvalight:intf3')
+        self.assertEqual( port_map.get('splight'),     'splight:intf4')
 

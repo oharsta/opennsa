@@ -182,7 +182,7 @@ class SSHChannel(ssh.SSHChannel):
             self.write(COMMAND_EXIT + LT)
             # Waiting for the prompt removed by hopet - we could wait forever here! :(
 
-        except Exception, e:
+        except Exception as e:
             log.msg('Error sending commands: %s' % str(e))
             raise e
 

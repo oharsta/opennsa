@@ -93,7 +93,7 @@ def setupTopology(nrm_map, network_name, base_name):
         for np in nrm_ports:
             if np.remote_network is not None:
                 link_vector.updateVector(np.name, { np.remote_network : 1 } ) # hack
-                for network, cost in np.vectors.items():
+                for network, cost in list(np.vectors.items()):
                     link_vector.updateVector(np.name, { network : cost })
     else:
         nrm_ports = []
@@ -222,7 +222,7 @@ class OpenNSAService(twistedservice.MultiService):
             if not nrm_ports:
                 raise config.ConfigurationError('No NRM Map file specified. Cannot configured a backend without port spec.')
 
-            backend_cfg = backend_configs.values()[0]
+            backend_cfg = list(backend_configs.values())[0]
 
             backend_service = setupBackend(backend_cfg, network_name, nrm_ports, aggr)
             backend_service.setServiceParent(self)

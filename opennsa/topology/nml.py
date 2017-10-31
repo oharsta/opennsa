@@ -203,7 +203,7 @@ class Topology(object):
 
 
     def getNetworkPort(self, port_id):
-        for network_id, (network,_) in self.networks.items():
+        for network_id, (network,_) in list(self.networks.items()):
             try:
                 port = network.getPort(port_id)
                 return network_id, port

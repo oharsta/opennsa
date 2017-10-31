@@ -222,6 +222,6 @@ def parseNMLTopology(nml_topology):
             out_port = outbound_ports[p1]
         bidirectional_ports.append( nml.BidirectionalPort(port_id, name, in_port, out_port) )
 
-    network = nml.Network(topology_id, network_name, inbound_ports.values(), outbound_ports.values(), bidirectional_ports)
+    network = nml.Network(topology_id, network_name, list(inbound_ports.values()), list(outbound_ports.values()), bidirectional_ports)
     return network
 

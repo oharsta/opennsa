@@ -1,5 +1,5 @@
 import os, json
-from StringIO import StringIO
+from io import StringIO
 
 from twisted.trial import unittest
 from twisted.internet import reactor, defer, task
@@ -109,7 +109,7 @@ class RestInterfaceTest(unittest.TestCase):
 
         resp = yield d
 
-        self.failUnlessEqual(resp.code, 400, 'Service did not return request error')
+        self.assertEqual(resp.code, 400, 'Service did not return request error')
 
 
     @defer.inlineCallbacks
@@ -130,7 +130,7 @@ class RestInterfaceTest(unittest.TestCase):
 
         resp = yield agent.request('POST', create_url, header, producer)
 
-        self.failUnlessEqual(resp.code, 201, 'Service did not return created')
+        self.assertEqual(resp.code, 201, 'Service did not return created')
         if not resp.headers.hasHeader('location'):
             self.fail('No location header in create response')
 
@@ -157,7 +157,7 @@ class RestInterfaceTest(unittest.TestCase):
         producer2 = FileBodyProducer(StringIO('commit'))
         resp2 = yield agent.request('POST', status_url, header, producer2)
 
-        self.failUnlessEqual(resp2.code, 200, 'Service did not return OK after commit')
+        self.assertEqual(resp2.code, 200, 'Service did not return OK after commit')
 
         # should do new call here..
 
@@ -170,7 +170,7 @@ class RestInterfaceTest(unittest.TestCase):
         # provision
         producer3 = FileBodyProducer(StringIO('provision'))
         resp3 = yield agent.request('POST', status_url, header, producer3)
-        self.failUnlessEqual(resp3.code, 200, 'Service did not return OK after provision')
+        self.assertEqual(resp3.code, 200, 'Service did not return OK after provision')
 
         # give the provider a bit of time to switch
         yield task.deferLater(reactor, 0.1, self._createCommitProvisionCB2, agent, conn_url, header)

@@ -51,7 +51,7 @@ def _createHeader(requester_nsa_urn, provider_nsa_urn, reply_to=None, correlatio
         for sa in security_attributes:
             grouped_sats.setdefault(sa.type_, []).append(sa.value)
 
-        for name, values in grouped_sats.items():
+        for name, values in list(grouped_sats.items()):
             at = nsiframework.AttributeType(name, None, None, values )
             sat.append( nsiframework.SessionSecurityAttrType( [ at ] ) )
 

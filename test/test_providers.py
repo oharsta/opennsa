@@ -1,4 +1,4 @@
-import os, datetime, json, StringIO
+import os, datetime, json, io
 
 from twisted.trial import unittest
 from twisted.internet import reactor, defer, task
@@ -371,8 +371,8 @@ class GenericProviderTest:
         self.failUnlessEquals(dst_stp.label.type_, cnt.ETHERNET_VLAN)
         self.failUnlessIn(dst_stp.label.labelValue(), ('1782', '1783') )
 
-        self.failUnlessEqual(crit.service_def.capacity, self.bandwidth)
-        self.failUnlessEqual(crit.revision,   0)
+        self.assertEqual(crit.service_def.capacity, self.bandwidth)
+        self.assertEqual(crit.revision,   0)
 
         from opennsa import state
         rsm, psm, lsm, dps = ci.states
@@ -388,7 +388,7 @@ class GenericProviderTest:
         self.header.newCorrelationId()
         acid = yield self.provider.reserve(self.header, None, None, None, self.criteria)
         header, cid, gid, desc, sc = yield self.requester.reserve_defer
-        self.failUnlessEqual(cid, acid)
+        self.assertEqual(cid, acid)
 
         yield self.provider.reserveCommit(self.header, acid)
         cid = yield self.requester.reserve_commit_defer
@@ -403,9 +403,9 @@ class GenericProviderTest:
 
         self.requester.data_plane_change_defer = defer.Deferred() # need a new one for deactivate
 
-        self.failUnlessEqual(cid, acid)
-        self.failUnlessEqual(active, True)
-        self.failUnlessEqual(consistent, True)
+        self.assertEqual(cid, acid)
+        self.assertEqual(active, True)
+        self.assertEqual(consistent, True)
 
         #yield self.provider.release(self.header, cid)
         #cid = yield self.requester.release_defer
@@ -500,7 +500,7 @@ class GenericProviderTest:
         criteria    = nsa.Criteria(0, self.schedule, nsa.Point2PointService(source_stp, dest_stp, 200, cnt.BIDIRECTIONAL, False, None) )
 
         #We shouldn't have reservations in the calendar right now
-        self.assertEquals(len(self.backend.calendar.reservations), 0,
+        self.assertEqual(len(self.backend.calendar.reservations), 0,
                           "Reservations size is %s should be 0" % len(self.backend.calendar.reservations))
 
         self.header.newCorrelationId()
@@ -511,7 +511,7 @@ class GenericProviderTest:
         self.requester.reserve_defer = defer.Deferred()
 
         # 2 reservations, for source_stp and dest_stp
-        self.assertEquals(len(self.backend.calendar.reservations), 2,
+        self.assertEqual(len(self.backend.calendar.reservations), 2,
                           "Reservations size is %s should be 2" % len(self.backend.calendar.reservations))
 
         #Construct a second circuit, with the same dest_stp
@@ -529,7 +529,7 @@ class GenericProviderTest:
         self.requester.reserve_defer = defer.Deferred()
 
         # The second reserve request failed, so we should have the original 2 reservations in the calendar
-        self.assertEquals(len(self.backend.calendar.reservations), 2,
+        self.assertEqual(len(self.backend.calendar.reservations), 2,
                          "Reservations size is %s should be 2" % len(self.backend.calendar.reservations))
 
         # terminate the connection
@@ -599,7 +599,7 @@ class GenericProviderTest:
         acid = yield self.provider.reserve(self.header, None, None, None, criteria)
         header, cid, gid, desc, sp = yield self.requester.reserve_defer
 
-        self.failUnlessEqual(cid, acid)
+        self.assertEqual(cid, acid)
 
         yield self.provider.reserveCommit(self.header, cid)
         yield self.requester.reserve_commit_defer
@@ -612,9 +612,9 @@ class GenericProviderTest:
         header, cid, nid, timestamp, dps = yield self.requester.data_plane_change_defer
         active, version, consistent = dps
 
-        self.failUnlessEqual(cid, acid)
-        self.failUnlessEqual(active, True)
-        self.failUnlessEqual(consistent, True)
+        self.assertEqual(cid, acid)
+        self.assertEqual(active, True)
+        self.assertEqual(consistent, True)
 
         self.requester.data_plane_change_defer = defer.Deferred()
 
@@ -622,8 +622,8 @@ class GenericProviderTest:
         header, cid, nid, timestamp, dps =  yield self.requester.data_plane_change_defer
         active, version, consistent = dps
 
-        self.failUnlessEqual(cid, acid)
-        self.failUnlessEqual(active, False)
+        self.assertEqual(cid, acid)
+        self.assertEqual(active, False)
 
         yield self.provider.terminate(self.header, cid)
         yield self.requester.terminate_defer
@@ -727,7 +727,7 @@ class GenericProviderTest:
         self.header.newCorrelationId()
         acid = yield self.provider.reserve(self.header, None, None, None, criteria)
         header, cid, gid, desc, sc = yield self.requester.reserve_defer
-        self.failUnlessEqual(cid, acid)
+        self.assertEqual(cid, acid)
 
         yield self.provider.reserveCommit(self.header, acid)
         cid = yield self.requester.reserve_commit_defer
@@ -742,9 +742,9 @@ class GenericProviderTest:
 
         self.requester.data_plane_change_defer = defer.Deferred() # need a new one for deactivate
 
-        self.failUnlessEqual(cid, acid)
-        self.failUnlessEqual(active, True)
-        self.failUnlessEqual(consistent, True)
+        self.assertEqual(cid, acid)
+        self.assertEqual(active, True)
+        self.assertEqual(consistent, True)
 
         #yield self.provider.release(self.header, cid)
         #cid = yield self.requester.release_defer
@@ -769,7 +769,7 @@ class DUDBackendTest(GenericProviderTest, unittest.TestCase):
 
         self.requester = common.DUDRequester()
 
-        nrm_ports = nrm.parsePortSpec(StringIO.StringIO(topology.ARUBA_TOPOLOGY))
+        nrm_ports = nrm.parsePortSpec(io.StringIO(topology.ARUBA_TOPOLOGY))
 
         self.backend = dud.DUDNSIBackend(self.network, nrm_ports, self.requester, {})
 
@@ -822,7 +822,7 @@ class AggregatorTest(GenericProviderTest, unittest.TestCase):
 
         self.clock = task.Clock()
 
-        nrm_map = StringIO.StringIO(topology.ARUBA_TOPOLOGY)
+        nrm_map = io.StringIO(topology.ARUBA_TOPOLOGY)
         nrm_ports, nml_network, link_vector = setup.setupTopology(nrm_map, self.network, 'aruba.net')
 
         self.backend = dud.DUDNSIBackend(self.network, nrm_ports, self.requester, {})
@@ -901,7 +901,7 @@ class RemoteProviderTest(GenericProviderTest, unittest.TestCase):
 
         self.clock = task.Clock()
 
-        nrm_map = StringIO.StringIO(topology.ARUBA_TOPOLOGY)
+        nrm_map = io.StringIO(topology.ARUBA_TOPOLOGY)
         nrm_ports, nml_network, link_vector = setup.setupTopology(nrm_map, self.network, 'aruba.net')
 
         self.backend = dud.DUDNSIBackend(self.network, nrm_ports, None, {}) # we set the parent later
@@ -1005,8 +1005,8 @@ class RemoteProviderTest(GenericProviderTest, unittest.TestCase):
         self.failUnlessEquals(dst_stp.label.type_, cnt.ETHERNET_VLAN)
         self.failUnlessIn(dst_stp.label.labelValue(), ('1782', '1783') )
 
-        self.failUnlessEqual(sd.capacity, self.bandwidth)
-        self.failUnlessEqual(crit.revision,   0)
+        self.assertEqual(sd.capacity, self.bandwidth)
+        self.assertEqual(crit.revision,   0)
 
         from opennsa import state
         rsm, psm, lsm, dps = ci.states
@@ -1055,8 +1055,8 @@ class RemoteProviderTest(GenericProviderTest, unittest.TestCase):
         self.failUnlessEquals(dst_stp.label.type_, cnt.ETHERNET_VLAN)
         self.failUnlessIn(dst_stp.label.labelValue(), ('1782', '1783') )
 
-        self.failUnlessEqual(crit.service_def.capacity, self.bandwidth)
-        self.failUnlessEqual(crit.revision,   0)
+        self.assertEqual(crit.service_def.capacity, self.bandwidth)
+        self.assertEqual(crit.revision,   0)
 
         from opennsa import state
         rsm, psm, lsm, dps = ci.states
@@ -1065,7 +1065,7 @@ class RemoteProviderTest(GenericProviderTest, unittest.TestCase):
         self.failUnlessEquals(lsm, state.CREATED)
         self.failUnlessEquals(dps[:2], (False, 0) )  # we cannot really expect a consistent result for consistent here
 
-        self.failUnlessEqual(len(crit.children), 1)
+        self.assertEqual(len(crit.children), 1)
         child = crit.children[0]
 
         rsm, psm, lsm, dps = ci.states # overwrite
@@ -1117,8 +1117,8 @@ class RemoteProviderTest(GenericProviderTest, unittest.TestCase):
         self.failUnlessEquals(dst_stp.label.type_, cnt.ETHERNET_VLAN)
         self.failUnlessIn(dst_stp.label.labelValue(), ('1782', '1783') )
 
-        self.failUnlessEqual(crit.service_def.capacity, self.bandwidth)
-        self.failUnlessEqual(crit.revision,   0)
+        self.assertEqual(crit.service_def.capacity, self.bandwidth)
+        self.assertEqual(crit.revision,   0)
 
         from opennsa import state
         rsm, psm, lsm, dps = ci.states
@@ -1127,7 +1127,7 @@ class RemoteProviderTest(GenericProviderTest, unittest.TestCase):
         self.failUnlessEquals(lsm, state.CREATED)
         self.failUnlessEquals(dps[:2], (False, 0) )  # we cannot really expect a consistent result for consistent here
 
-        self.failUnlessEqual(len(crit.children), 1)
+        self.assertEqual(len(crit.children), 1)
         child = crit.children[0]
 
         rsm, psm, lsm, dps = ci.states # overwrite

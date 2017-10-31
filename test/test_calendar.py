@@ -45,7 +45,7 @@ class CalendarTest(unittest.TestCase):
         self.c.checkReservation('r1', ds1, de1)
         self.c.addReservation('r1', ds1, de2)
 
-        self.failUnlessRaises(error.STPUnavailableError, self.c.checkReservation, 'r1', ds2, de2)
+        self.assertRaises(error.STPUnavailableError, self.c.checkReservation, 'r1', ds2, de2)
 
 
     def testStartNone(self):
@@ -58,7 +58,7 @@ class CalendarTest(unittest.TestCase):
         self.c.checkReservation('r1', ds1, de1)
         self.c.addReservation('r1', ds1, de2)
 
-        self.failUnlessRaises(error.STPUnavailableError, self.c.checkReservation, 'r1', ds2, de2)
+        self.assertRaises(error.STPUnavailableError, self.c.checkReservation, 'r1', ds2, de2)
 
 
     def testEndNone(self):
@@ -71,7 +71,7 @@ class CalendarTest(unittest.TestCase):
         self.c.checkReservation('r1', ds1, de1)
         self.c.addReservation('r1', ds1, de2)
 
-        self.failUnlessRaises(error.STPUnavailableError, self.c.checkReservation, 'r1', ds2, de2)
+        self.assertRaises(error.STPUnavailableError, self.c.checkReservation, 'r1', ds2, de2)
 
 
     def testStartEndNone(self):
@@ -84,6 +84,6 @@ class CalendarTest(unittest.TestCase):
         self.c.checkReservation('r1', ds1, de1)
         self.c.addReservation('r1', ds1, de2)
 
-        self.failUnlessRaises(error.STPUnavailableError, self.c.checkReservation, 'r1', ds2, de2)
+        self.assertRaises(error.STPUnavailableError, self.c.checkReservation, 'r1', ds2, de2)
 
 

@@ -17,10 +17,10 @@ class TestProviderRegistry(unittest.TestCase):
         self.pr.spawnProvider(agent, [ 'testnetwork'] )
 
         provider1 = self.pr.getProvider(cnt.URN_OGF_PREFIX + 'test')
-        self.failUnlessEqual(provider1.urn(), cnt.URN_OGF_PREFIX + 'test')
+        self.assertEqual(provider1.urn(), cnt.URN_OGF_PREFIX + 'test')
 
         provider2 = self.pr.getProviderByNetwork('testnetwork')
-        self.failUnlessEqual(provider2, cnt.URN_OGF_PREFIX + 'test')
+        self.assertEqual(provider2, cnt.URN_OGF_PREFIX + 'test')
 
 
     def testUpdatedNetwork(self):
@@ -31,7 +31,7 @@ class TestProviderRegistry(unittest.TestCase):
         self.pr.spawnProvider(agent, [ 'testnetwork', 'testnetwork2' ] )
 
         provider2 = self.pr.getProviderByNetwork('testnetwork2')
-        self.failUnlessEqual(provider2, cnt.URN_OGF_PREFIX + 'test')
+        self.assertEqual(provider2, cnt.URN_OGF_PREFIX + 'test')
 
 
     def testRemovedNetwork(self):
@@ -40,6 +40,6 @@ class TestProviderRegistry(unittest.TestCase):
         self.pr.spawnProvider(agent, [ 'testnetwork', 'testnetwork2' ] )
         self.pr.spawnProvider(agent, [ 'testnetwork'] )
 
-        self.failUnlessRaises(error.STPResolutionError, self.pr.getProviderByNetwork, 'testnetwork2')
+        self.assertRaises(error.STPResolutionError, self.pr.getProviderByNetwork, 'testnetwork2')
 
 

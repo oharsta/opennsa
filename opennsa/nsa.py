@@ -11,7 +11,7 @@ Copyright: NORDUnet (2011-2013)
 
 import uuid
 import random
-import urlparse
+import urllib.parse
 import itertools
 
 from opennsa import error, constants as cnt
@@ -126,7 +126,7 @@ class Label(object):
 
         label_values = []
         i = iter(other.values)
-        o1, o2 = i.next()
+        o1, o2 = next(i)
 
         for v1, v2 in self.values:
             while True:
@@ -134,7 +134,7 @@ class Label(object):
                     break
                 elif o2 < v1:
                     try:
-                        o1, o2 = i.next()
+                        o1, o2 = next(i)
                     except StopIteration:
                         break
                     continue
@@ -143,7 +143,7 @@ class Label(object):
                     break
                 elif o2 <= v2:
                     try:
-                        o1, o2 = i.next()
+                        o1, o2 = next(i)
                     except StopIteration:
                         break
 
@@ -162,7 +162,7 @@ class Label(object):
         return len(self.values) == 1 and self.values[0][0] == self.values[0][1]
 
     def enumerateValues(self):
-        lv = [ range(lr[0], lr[1]+1) for lr in self.values ]
+        lv = [ list(range(lr[0], lr[1]+1)) for lr in self.values ]
         return list(itertools.chain.from_iterable( lv ) )
 
     def randomLabel(self):
@@ -297,7 +297,7 @@ class NetworkServiceAgent(object):
 
 
     def getHostPort(self):
-        url = urlparse.urlparse(self.endpoint)
+        url = urllib.parse.urlparse(self.endpoint)
         host, port = url.netloc.split(':',2)
         port = int(port)
         return host, port

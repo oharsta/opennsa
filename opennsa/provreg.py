@@ -38,7 +38,7 @@ class ProviderRegistry(object):
         """
         Get the provider urn by specifying network.
         """
-        for provider, networks in self.provider_networks.items():
+        for provider, networks in list(self.provider_networks.items()):
             if network_id in networks:
                 return provider
         else:

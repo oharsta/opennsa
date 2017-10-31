@@ -789,14 +789,14 @@ class Aggregator:
 
         # check if all sub results have been received
         cb_header, conn, count = self.query_requests[cbh_correlation_id]
-        scr = [ res[0] for cbhci, res in self.query_calls.values() if res and cbhci == cbh_correlation_id ]
+        scr = [ res[0] for cbhci, res in list(self.query_calls.values()) if res and cbhci == cbh_correlation_id ]
 
         if len(scr) == count:
             # all results back, can emit
 
             # clear temporary structure
             self.query_requests.pop(cbh_correlation_id)
-            for k,v in self.query_calls.items():
+            for k,v in list(self.query_calls.items()):
                 cbhci, res = v
                 if cbhci == cbh_correlation_id:
                     self.query_calls.pop(k)
@@ -883,7 +883,7 @@ class Aggregator:
 
         yield conn.save()
 
-        outstanding_calls = [ v for v in self.reservations.values() if v.get('service_connection_id') == resv_info['service_connection_id'] ]
+        outstanding_calls = [ v for v in list(self.reservations.values()) if v.get('service_connection_id') == resv_info['service_connection_id'] ]
         if len(outstanding_calls) > 0:
             log.msg('Connection %s: Still missing %i reserveConfirmed call(s) to aggregate' % (conn.connection_id, len(outstanding_calls)), system=LOG_SYSTEM)
             return

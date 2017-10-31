@@ -66,7 +66,7 @@ def httpRequest(url, payload, headers, method='POST', timeout=DEFAULT_TIMEOUT, c
     factory.headers['host'] = host + ':' + str(port)
     factory.headers['User-Agent'] = 'OpenNSA/Twisted'
 
-    for header, value in headers.items():
+    for header, value in list(headers.items()):
         factory.headers[header] = value
 
     if scheme == 'https':
